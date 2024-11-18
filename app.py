@@ -168,17 +168,58 @@ cursor = connection.cursor()
 # """)
 
 # << All invoices that are greater than 1.98 from any cities whose name starts with P or D >>
-result = connection.execute("""
-SELECT
-    InvoiceDate,
-    BillingCity,
-    Total
-FROM
-    Invoice
-WHERE
-    (BillingCity LIKE 'P%' OR BillingCity LIKE 'D%') AND (Total > 1.98)
-""")
+# result = connection.execute("""
+# SELECT
+#     InvoiceDate,
+#     BillingCity,
+#     Total
+# FROM
+#     Invoice
+# WHERE
+#     (BillingCity LIKE 'P%' OR BillingCity LIKE 'D%') AND (Total > 1.98)
+# """)
 
+# << Customers spending between 7 ad 15 >>
+# result = connection.execute("""
+# SELECT
+#     InvoiceDate,
+#     BillingCity,
+#     Total,
+#     CASE
+#         WHEN Total < 2.00 THEN 'Baseline Purchase'
+#         WHEN Total BETWEEN 2.00 AND 6.99 THEN 'Low Purchase'
+#         WHEN Total BETWEEN 7.00 AND 15.00 THEN 'Target Purchase'
+#         ELSE 'Top Performer'
+#     END AS 'PurchaseType'
+# FROM
+#     Invoice
+# WHERE
+#     PurchaseType = 'Top Performer'
+# """)
+# CASE / END shows where IF / ELSE logic is located
+# END AS shows name of the new column
+
+# << Section 5 exercise >>
+# result = connection.execute("""
+# SELECT
+#     Name,
+#     Composer,
+#     UnitPrice,
+#     CASE
+#         WHEN UnitPrice <= 0.99 THEN 'Budget'
+#         WHEN UnitPrice BETWEEN 1.00 AND 1.49 THEN 'Regular'
+#         WHEN UnitPrice BETWEEN 1.50 AND 1.99 THEN 'Premium'
+#         ELSE 'Exclusive'
+#     END AS PriceCategory
+# FROM
+#     Track
+# ORDER BY
+#     PriceCategory
+# """)
+
+for column in result.description:
+    print(column[0], end=" | ")
+print()
 
 for row in result:
     print(row)
