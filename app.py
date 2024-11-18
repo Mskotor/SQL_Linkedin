@@ -217,6 +217,19 @@ cursor = connection.cursor()
 #     PriceCategory
 # """)
 
+# << Simple joins >>
+# result = connection.execute("""
+# SELECT *
+# FROM
+#     Invoice
+# INNER JOIN
+#     Customer ON Invoice.CustomerId = Customer.CustomerId
+# ORDER BY
+#     Customer.CustomerId
+# """)
+
+# << Simplifying joins >>
+
 for column in result.description:
     print(column[0], end=" | ")
 print()
