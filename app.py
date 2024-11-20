@@ -1,5 +1,4 @@
 import sqlite3
-from idlelib.debugger_r import restart_subprocess_debugger
 
 # << Connect to the database >>
 connection = sqlite3.connect('WSDA_Music.db')
@@ -228,7 +227,42 @@ cursor = connection.cursor()
 #     Customer.CustomerId
 # """)
 
-# << Simplifying joins >>
+# << Inner Join >>
+# Returns matching records that are present in both tables
+
+# << Left Outer Join >>
+# Returns all records form the left table, and matches them with the right table
+
+# << Right Outer Join >>
+# Returns all records from the right table, and matches them with the left table
+
+# << Which employees are responsoble for top 10 sales >>
+# result = connection.execute("""
+# SELECT *
+# FROM
+#     Invoice
+# INNER JOIN Customer ON Invoice.CustomerID = Customer.CustomerID
+# INNER JOIN Employee ON Customer.SupportRepID = Employee.EmployeeID
+# ORDER BY
+#     Invoice.Total DESC
+# LIMIT 10
+# """)
+
+# << Section 6 exercise >>
+# Write a SQL query to generate a report that lists each customer along with their assigned support representative
+# result = connection.execute("""
+# SELECT
+#     Customer.FirstName AS 'CustomerFirstName',
+#     Customer.LastName AS 'CustomerLastName',
+#     Employee.FirstName AS 'SupportRepFirstName',
+#     Employee.LastName AS 'SupportRepLastName'
+# FROM
+#     Customer
+# LEFT OUTER JOIN Employee ON Customer.SupportRepID = Employee.EmployeeID
+# ORDER BY
+#     SupportRepLastName,
+#     SupportRepFirstName
+# """)
 
 for column in result.description:
     print(column[0], end=" | ")
