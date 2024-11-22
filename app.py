@@ -264,6 +264,72 @@ cursor = connection.cursor()
 #     SupportRepFirstName
 # """)
 
+# << Concatenating strings >>
+# In SQL we concatenate table fields with pipe symbol ||
+# result = connection.execute("""
+# SELECT
+#     FirstName,
+#     LastName,
+#     FirstName||' '||LastName||' '||Address||' '||City
+# FROM
+#     Customer
+# WHERE
+#     Country = 'USA'
+# """)
+
+# << Separating strings >>
+# Spliting text is done with SUBSTR() function
+# result = connection.execute("""
+# SELECT
+#     FirstName,
+#     LastName,
+#     PostalCode,
+#     SUBSTRING(PostalCode, 1, 5) AS 'Postal Code'
+# FROM
+#     Customer
+# WHERE
+#     Country = 'USA'
+# """)
+
+# << UPPER AND LOWER >>
+
+# << Date functions >>
+# STRFTIME()
+# result = connection.execute("""
+# SELECT
+#     FirstName,
+#     LastName,
+#     BirthDate,
+#     STRFTIME('%Y-%m-%d', BirthDate) AS 'Birthdate no hour',
+#     STRFTIME('%Y-%m-%d', 'now') - STRFTIME('%Y-%m-%d', BirthDate) AS 'Age'
+# FROM
+#     Employee
+# """)
+
+# << Aggregate functions >>
+# result = connection.execute("""
+# SELECT
+#     SUM(Total) AS 'Total Sales',
+#     AVG(Total) AS 'Average Sale',
+#     MAX(Total) AS 'Max Sale',
+#     MIN(Total) AS 'Min Sale',
+#     COUNT(Total)
+# FROM
+#     Invoice
+# """)
+
+# << Nesting functions >>
+# result = connection.execute("""
+# SELECT
+#     SUM(Total) AS 'Total Sales',
+#     ROUND(AVG(Total), 2) AS 'Average Sale',
+#     MAX(Total) AS 'Max Sale',
+#     MIN(Total) AS 'Min Sale',
+#     COUNT(Total)
+# FROM
+#     Invoice
+# """)
+
 for column in result.description:
     print(column[0], end=" | ")
 print()
