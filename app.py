@@ -330,6 +330,67 @@ cursor = connection.cursor()
 #     Invoice
 # """)
 
+# << Filtering and grouping >>
+# result = connection.execute("""
+# SELECT
+#     BillingCity,
+#     ROUND(AVG(Total), 2) AS 'AverageSpent'
+# FROM
+#     Invoice
+# GROUP BY
+#     BillingCity
+# ORDER BY
+#     AverageSpent DESC
+# """)
+
+# << Filtering with WHERE clause >>
+# result = connection.execute("""
+# SELECT
+#     BillingCity,
+#     ROUND(AVG(Total), 2) AS AverageSpent
+# FROM
+#     Invoice
+# WHERE
+#     BillingCity LIKE 'l%'
+# GROUP BY
+#     BillingCity
+# ORDER BY
+#     AverageSpent DESC
+# """)
+
+# << Filtering with HAVING clause >>
+# What are the average invoice totals greater than $5
+# result = connection.execute("""
+# SELECT
+#     BillingCity,
+#     ROUND(AVG(Total), 2) AS AverageSpent
+# FROM
+#     Invoice
+# GROUP BY
+#     BillingCity
+# HAVING
+#     AVG(Total) > 5
+# ORDER BY
+#     AverageSpent DESC
+# """)
+
+# << Grouping by many fields >>
+# What are the average invoice totals by billing country and city?
+# result = connection.execute("""
+# SELECT
+#     BillingCountry,
+#     BillingCity,
+#     ROUND(AVG(Total), 2) AS TotalSpent
+# FROM
+#     Invoice
+# GROUP BY
+#     BillingCountry,
+#     BillingCity
+# ORDER BY
+#     BillingCountry,
+#     TotalSpent DESC
+# """)
+
 for column in result.description:
     print(column[0], end=" | ")
 print()
