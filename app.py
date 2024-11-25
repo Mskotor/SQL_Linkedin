@@ -1,4 +1,6 @@
 import sqlite3
+from ctypes import HRESULT
+from idlelib.debugger_r import restart_subprocess_debugger
 
 # << Connect to the database >>
 connection = sqlite3.connect('WSDA_Music.db')
@@ -477,6 +479,37 @@ cursor = connection.cursor()
 #     Track.Name
 # """)
 
+# << Section 10 - Stored queries and VIEWS / cirtual tables >>
+# result = connection.execute("""
+# CREATE VIEW V_AvgTotal AS
+#     SELECT
+#         ROUND(AVG(Total), 2) AS 'Average Total'
+#     FROM
+#         Invoice
+# """)
+
+# << Section 11 - Inserting data >>
+# result = connection.execute("""
+# INSERT INTO
+#     Artist(Name) VALUES('Bob Marley')
+# """)
+
+# << Update data >>
+# result = connection.execute("""
+# UPDATE
+#     Artist SET Name = 'Damien Marley'
+# WHERE
+#     ArtistId = 276
+# """)
+
+# << Delete data >>
+# WHERE clause must be provided, otherwise we will delete whole table
+result = connection.execute("""
+DELETE FROM
+    Artist
+WHERE
+    ArtistId = 276
+""")
 
 for column in result.description:
     print(column[0], end=" | ")
