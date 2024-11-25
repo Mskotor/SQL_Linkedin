@@ -391,6 +391,93 @@ cursor = connection.cursor()
 #     TotalSpent DESC
 # """)
 
+# << Section 9 - subqueries >>
+# Data about invoices that are less than the average total spend
+# (SELECT AVG(Total) FROM Invoice) is the inner query
+# result = connection.execute("""
+# SELECT
+#     InvoiceDate,
+#     BillingAddress,
+#     BillingCity,
+#     Total
+# FROM
+#     Invoice
+# WHERE
+#     Total < (SELECT AVG(Total) FROM Invoice)
+# ORDER BY
+#     Total DESC
+# """)
+
+# << Aggregated subqueries >>
+# How is each individual city performing against the global average sales
+# result = connection.execute("""
+# SELECT
+#     BillingCity,
+#     AVG(Total) AS CityAverage,
+#     (SELECT AVG(Total) FROM Invoice) AS GlobalAverage
+# FROM
+#     Invoice
+# GROUP BY
+#     BillingCity
+# """)
+
+# << Subqueries without aggregate functions >>
+# All invoices that were billed after date on invoice 251
+# result = connection.execute("""
+# SELECT
+#     InvoiceDate,
+#     BillingAddress,
+#     BillingCity
+# FROM
+#     Invoice
+# WHERE
+#     InvoiceDate >
+#         (SELECT InvoiceDate FROM Invoice WHERE InvoiceID = 251)
+# """)
+
+# << Using multiple variables from sub-query in outer query - IN >>
+# result = connection.execute("""
+# SELECT
+#     InvoiceDate,
+#     BillingAddress,
+#     BillingCity
+# FROM
+#     Invoice
+# WHERE
+#     InvoiceDate IN
+#         (SELECT InvoiceDate FROM Invoice WHERE InvoiceId IN (251, 252,254))
+# """)
+
+# << Subqueries and DISTINCT - Which tracks are not selling? >>
+# result = connection.execute("""
+# SELECT
+#     TrackId,
+#     Composer,
+#     Name
+# FROM
+#     Track
+# WHERE
+#     TrackId NOT IN
+#         (SELECT DISTINCT TrackId FROM InvoiceLine)
+# """)
+
+# << Coding challenge section 9 >>
+# result = connection.execute("""
+# SELECT
+#     Track.TrackID,
+#     Track.Name,
+#     Track.Composer,
+#     Genre.Name
+# FROM
+#     Track
+#     JOIN Genre ON Track.GenreId = Genre.GenreId
+# WHERE Track.TrackId NOT IN
+#     (SELECT DISTINCT InvoiceLine.TrackId FROM InvoiceLine)
+# ORDER BY
+#     Track.Name
+# """)
+
+
 for column in result.description:
     print(column[0], end=" | ")
 print()
